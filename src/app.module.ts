@@ -3,6 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { HomeModule } from './home/home.module';
+import { Home } from './home/entities/home.entities';
 
 @Module({
   imports: [
@@ -11,14 +13,15 @@ import { ConfigModule } from '@nestjs/config';
       envFilePath: '.env',
     }),
     TypeOrmModule.forRoot({
-      type: 'mongodb',
-      url: process.env.MONGO_URL,
+      type: 'sqlite',
+      database: 'db.sqlite',
       synchronize: true, // only for development
       autoLoadEntities: true,
       entities: [
-
+        Home,
       ],
     }),
+    HomeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
