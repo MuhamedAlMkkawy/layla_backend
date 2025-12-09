@@ -1,3 +1,4 @@
+import { Products } from "src/products/entities/products.entities";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
@@ -26,6 +27,11 @@ export class Home {
     };
     image: string;
   }[];
+
+
+  @Column("simple-json")
+  products : Products[]
+
 
   @Column("simple-json")
   feedbacks: {

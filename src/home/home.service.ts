@@ -4,6 +4,7 @@ import { Home } from './entities/home.entities';
 import { Repository } from 'typeorm';
 import { merge } from 'lodash';
 import { UpdateHomeDto } from './dtos/UpdateHome.dto';
+import { Products } from 'src/products/entities/products.entities';
 
 
 
@@ -11,7 +12,10 @@ import { UpdateHomeDto } from './dtos/UpdateHome.dto';
 export class HomeService {
   constructor(
     @InjectRepository(Home) 
-    private repo: Repository<Home>
+    private repo: Repository<Home>,
+
+    @InjectRepository(Products) 
+    private productsRepo: Repository<Products>
   ){}
 
   // GET ALL HOME DATA
@@ -22,7 +26,18 @@ export class HomeService {
       throw new NotFoundException('Home Page is\'nt Found!!')
     }
 
-    return home
+
+    const bestSaleProducts = await this.productsRepo.find({
+      where: { best_sale: true },
+    });
+
+    const data = {
+      ...home[0],
+      products : bestSaleProducts
+    }
+
+    console.log(data)
+    return data
   }
 
 
@@ -33,7 +48,14 @@ export class HomeService {
 
     if(homeData) throw new NotFoundException('Home Page is Already Found!!')
 
-    const home = this.repo.create(data)
+    const bestSaleProducts = await this.productsRepo.find({
+      where: { best_sale: true },
+    });
+      
+    const home = this.repo.create({
+      ...data ,
+      products : bestSaleProducts
+    })
 
     if(!home) throw new NotFoundException('Home Page is\'nt Found!!')
   

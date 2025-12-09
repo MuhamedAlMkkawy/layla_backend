@@ -7,7 +7,8 @@ import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { TransformFlatToNestedInterceptor } from '../interceptors/transformFlatToNested.interceptor';
 import { FlatToNestedWithFilesInterceptor } from '../interceptors/FlatToNestedWithFilesInterceptor.interceptor';
-import { UpdateHomeDto } from './dtos/UpdateHome.dto';
+import { Serialize } from 'src/interceptors/dataSerializor.interceptor';
+import { HomeResponseDto } from './dtos/HomeResponce.dto';
 
 @Controller('home')
 @UseInterceptors(
@@ -30,6 +31,7 @@ import { UpdateHomeDto } from './dtos/UpdateHome.dto';
   TransformFlatToNestedInterceptor,
   FlatToNestedWithFilesInterceptor
 )
+@Serialize(HomeResponseDto)
 export class HomeController {
   constructor(private readonly homeService: HomeService) {}
 
