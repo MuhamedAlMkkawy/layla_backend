@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { HomeModule } from './home/home.module';
 import { Home } from './home/entities/home.entities';
+import { ProductsModule } from './products/products.module';
+import { Products } from './products/entities/products.entities';
 
 @Module({
   imports: [
@@ -19,9 +21,11 @@ import { Home } from './home/entities/home.entities';
       autoLoadEntities: true,
       entities: [
         Home,
+        Products
       ],
     }),
     HomeModule,
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

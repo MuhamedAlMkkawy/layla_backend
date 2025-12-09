@@ -61,6 +61,7 @@ export class HomeService {
     if(!home) throw new NotFoundException('Home Page is\'nt Found!!')
 
     await this.repo.remove(home)
+
     return {
       message : 'Home Page is Deleted Successfully!!',
       data : null
