@@ -21,6 +21,9 @@ export class Products {
   @Column()
   discount_price : number
 
+  @Column({nullable : true})
+  best_sale : boolean
+
   @Column()
   description: string;
 

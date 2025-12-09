@@ -20,6 +20,8 @@ export class ProductsResponceDto {
   @Expose()
   name: string;
 
+  @Expose()
+  best_sale : boolean
 
   @Expose()
   price: number;
