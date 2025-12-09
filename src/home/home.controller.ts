@@ -5,7 +5,6 @@ import { CreateHomeDto } from './dtos/CreateHome.dto';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { TransformFlatToNestedInterceptor } from '../interceptors/transformFlatToNested.interceptor';
 import { FlatToNestedWithFilesInterceptor } from '../interceptors/FlatToNestedWithFilesInterceptor.interceptor';
 import { Serialize } from 'src/interceptors/dataSerializor.interceptor';
 import { HomeResponseDto } from './dtos/HomeResponce.dto';
@@ -28,7 +27,6 @@ import { HomeResponseDto } from './dtos/HomeResponce.dto';
       cb(null, true);
     },
   }),
-  TransformFlatToNestedInterceptor,
   FlatToNestedWithFilesInterceptor
 )
 @Serialize(HomeResponseDto)

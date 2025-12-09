@@ -10,8 +10,7 @@ export class Products {
   
   @Column()
   name: string;
-
-
+  
   @Column()
   price: number;
 
@@ -43,5 +42,4 @@ export class Products {
     color : string
   }[]
 
-  
 }

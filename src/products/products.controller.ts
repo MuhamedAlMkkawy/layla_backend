@@ -3,7 +3,6 @@ import { ProductsService } from './products.service';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { TransformFlatToNestedInterceptor } from 'src/interceptors/transformFlatToNested.interceptor';
 import { FlatToNestedWithFilesInterceptor } from 'src/interceptors/FlatToNestedWithFilesInterceptor.interceptor';
 import { plainToClass } from 'class-transformer';
 import { CreateProductDto } from './dtos/CreateProduct.dto';
@@ -29,7 +28,6 @@ import { UpdateProductDto } from './dtos/UpdateProduct.dto';
       cb(null, true);
     },
   }),
-  TransformFlatToNestedInterceptor,
   FlatToNestedWithFilesInterceptor
 )
 export class ProductsController {
