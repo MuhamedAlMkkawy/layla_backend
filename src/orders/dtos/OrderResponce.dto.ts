@@ -1,4 +1,4 @@
-import { Expose, Type } from "class-transformer";
+import { Expose, Transform, Type } from "class-transformer";
 
 
 export class OrderProductResponseDto {
@@ -58,7 +58,15 @@ export class OrderResponseDto {
   subTotal: string; // Changed to string based on example " 399.99"
 
   @Expose()
-  status: string; // Changed to string based on example " 0"
+  @Expose()
+  @Transform(({ value }) => {
+    const statusNum = parseInt(value, 10);
+    return statusNum == 0 ? 'pending' :
+          statusNum == 1 ? 'prepared' :
+          statusNum == 2 ? 'delivered' :
+          statusNum == -1 ? 'cancelled' : null;
+  })
+  status: string;
 
   @Expose()
   @Type(() => UserResponseDto)

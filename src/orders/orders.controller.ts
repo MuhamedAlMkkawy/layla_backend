@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseInterceptors } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { FlatToNestedWithFilesInterceptor } from 'src/interceptors/FlatToNestedWithFilesInterceptor.interceptor';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
@@ -60,8 +60,20 @@ export class OrdersController {
 
 
 
-  // UPDATE ORDER
   // CHANGE ORDER STATUS
+  @Patch('/:id')
+  async updateOrderStatus(@Param('id' , ParseIntPipe) id : number){
+    return await this.ordersService.updateOrderStatus(id)
+  }
+  
+  
+  // CANCEL ORDER
+  @Delete('cancel/:id')
+  async cancelOrder(@Param('id' , ParseIntPipe) id : number) {
+    return await this.ordersService.cancelOrder(id)
+  }
+
+
   // DELETE ORDER
   @Delete('/:id')
   async deleteOrder(@Param('id' , ParseIntPipe) id : number) {
