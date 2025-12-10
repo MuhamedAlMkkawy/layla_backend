@@ -9,6 +9,10 @@ import { ProductsModule } from './products/products.module';
 import { Products } from './products/entities/products.entities';
 import { OrdersModule } from './orders/orders.module';
 import { Orders } from './orders/entities/orders.entities';
+import { UsersModule } from './users/users.module';
+import { Users } from './users/entities/users.entities';
+import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -24,12 +28,18 @@ import { Orders } from './orders/entities/orders.entities';
       entities: [
         Home,
         Products,
-        Orders
+        Orders,
+        Users
       ],
+    }),
+    JwtModule.register({
+      secret: process.env.SECRET_KEY
     }),
     HomeModule,
     ProductsModule,
     OrdersModule,
+    UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
