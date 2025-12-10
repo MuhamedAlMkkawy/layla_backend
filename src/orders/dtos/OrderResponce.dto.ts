@@ -1,11 +1,30 @@
 import { Expose, Type } from "class-transformer";
 
+
 export class OrderProductResponseDto {
   @Expose()
   id: number;
 
   @Expose()
+  image: string;
+
+  @Expose()
+  name: string;
+
+  @Expose()
+  best_sale: boolean | null; // Type can be refined if the structure of best_sale is known
+
+  @Expose()
+  category: string;
+
+  @Expose()
+  rating: number;
+
+  @Expose()
   quantity: number;
+
+  @Expose()
+  color : string
 }
 
 export class UserResponseDto {
@@ -13,10 +32,10 @@ export class UserResponseDto {
   fullName: string;
 
   @Expose()
-  mainPhoneNumber: number;
+  mainPhoneNumber: string; // Changed to string based on example " 201234567890"
 
   @Expose()
-  secPhoneNumber: number;
+  secPhoneNumber: string; // Changed to string based on example " 201234567891"
 
   @Expose()
   governerate: string;
@@ -36,10 +55,10 @@ export class OrderResponseDto {
   created_at: string;
 
   @Expose()
-  subTotal: number;
+  subTotal: string; // Changed to string based on example " 399.99"
 
   @Expose()
-  status: number;
+  status: string; // Changed to string based on example " 0"
 
   @Expose()
   @Type(() => UserResponseDto)
@@ -48,4 +67,16 @@ export class OrderResponseDto {
   @Expose()
   @Type(() => OrderProductResponseDto)
   products: OrderProductResponseDto[];
+}
+
+export class OrderFullResponseDto {
+  @Expose()
+  status: string;
+
+  @Expose()
+  message: string;
+
+  @Expose()
+  @Type(() => OrderResponseDto)
+  data: OrderResponseDto;
 }

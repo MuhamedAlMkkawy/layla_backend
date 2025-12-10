@@ -31,7 +31,7 @@ export class CreateOrderDto {
 
   @IsArray()
   @IsString({ each: true })
-  products: string[];
+  products: any[];
 
   @IsObject()
   @ValidateNested()

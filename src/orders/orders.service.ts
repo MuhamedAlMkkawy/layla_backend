@@ -22,29 +22,8 @@ export class OrdersService {
       if (!orders || orders.length === 0) {
         throw new NotFoundException('No Orders Found!!!');
       }
-
-      const productIds = orders
-        .flatMap(order => order.products.map(p => Number(p.id))); // collect all product IDs
-
-    console.log(productIds)
-
-      const products = await this.productsRepo.find({
-        where: { id: In(productIds) }
-      });
-
-      if (products.length === 0) {
-        throw new NotFoundException('No related products found');
-      }
-      // attach product details back to each order
-      const ordersWithProducts = orders.map(order => ({
-        ...order,
-        products: order?.products.map(p => ({
-          ...p,
-          product: products.find(prod => prod?.id === Number(p?.id)) || null
-        }))
-      }));
-
-      return ordersWithProducts;
+      
+      return orders;
 
     }
 
@@ -53,7 +32,6 @@ export class OrdersService {
     // GET SINGLE ORDER
     async getSingleOrder(id : number) {
       const order =  await this.ordersRepo.findBy({id})
-
 
       if(!order[0]) throw new NotFoundException('This order isn\'t Found')
 
@@ -76,22 +54,26 @@ export class OrdersService {
         throw new NotFoundException('One or more products not found');
       }
 
+
       // Create order with products + quantity
+      const ordProducts = products.map(product => {
+        const selected = data.products.find(item => Number(item.id) === product.id);
+        return {
+          ...product,
+          quantity: selected ? Number(selected.quantity) : 0,
+          color : selected ? selected.color : null
+        };
+      });
+
       const order = this.ordersRepo.create({
         status: 0,
         ...data,
-        products: products.map(product => {
-          const selected = data.products.find(item => Number(item.id) === product.id);
-
-          return {
-            ...product,
-            quantity: selected ? Number(selected.quantity) : 0
-          };
-        })
+        products: ordProducts,
       });
 
-
       if(!order) throw new NotFoundException('Order Not Found')
+
+        console.log(order)
 
       return await this.ordersRepo.save(order)
     } 
@@ -102,4 +84,15 @@ export class OrdersService {
     // UPDATE ORDER
     // CHANGE ORDER STATUS
     // DELETE ORDER
+    async deleteOrder(id : number){
+      const order = await this.ordersRepo.findBy({id})
+
+      if(!order) throw new NotFoundException('This Order Isn\'t Found!!!')
+        
+      await this.ordersRepo.remove(order)
+
+      return {
+        message : 'Order Is Deleted Successfully' ,
+      }
+    }
 }
