@@ -19,4 +19,7 @@ export class Users {
 
   @Column()
   password : string
+
+  @Column({nullable : true})
+  token : string
 }

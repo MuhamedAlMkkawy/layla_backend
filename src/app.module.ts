@@ -32,9 +32,6 @@ import { JwtModule } from '@nestjs/jwt';
         Users
       ],
     }),
-    JwtModule.register({
-      secret: process.env.SECRET_KEY
-    }),
     HomeModule,
     ProductsModule,
     OrdersModule,

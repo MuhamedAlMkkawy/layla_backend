@@ -5,6 +5,9 @@ import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { FlatToNestedWithFilesInterceptor } from 'src/interceptors/FlatToNestedWithFilesInterceptor.interceptor';
 import { CreateUserDto } from './dtos/CreateUser.dto';
+import { SigninDto } from './dtos/Signin';
+import { Serialize } from 'src/interceptors/dataSerializor.interceptor';
+import { UserResponseDto } from '../users/dtos/UserResponce.dto';
 
 @Controller('auth')
 @UseInterceptors(
@@ -26,10 +29,20 @@ import { CreateUserDto } from './dtos/CreateUser.dto';
   }),
   FlatToNestedWithFilesInterceptor
 )
+@Serialize(UserResponseDto)
+
+
 export class AuthController {
   constructor(private authService : AuthService){}
 
-  // LOGIN
+  // SIGNIN
+  @Post('/signin')
+  async logIn(@Body() body : SigninDto){
+    return await this.authService.signin(body)
+  }
+
+
+
   // SIGNUP
   @Post('/signup')
   async signUp(@Body() body : CreateUserDto) {

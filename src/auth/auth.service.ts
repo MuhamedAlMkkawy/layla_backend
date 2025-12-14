@@ -1,10 +1,11 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dtos/CreateUser.dto';
 import { randomBytes } from 'crypto';
 import { promisify } from 'util';
 import * as crypto from 'crypto';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
+import { SigninDto } from './dtos/Signin';
 
 
 const scrypt = promisify(crypto.scrypt);
@@ -18,7 +19,32 @@ export class AuthService {
     private jwtService : JwtService
   ){}
 
-  // LOGIN
+  // SIGNIN
+  async signin(body : any){
+    const {
+      email,
+      password
+    } = body
+    const [user] =  await this.userService.findUser(email)
+    
+    if(!user){
+      throw new BadRequestException("Please Check the information you Entered😡")
+    }
+
+
+    const [salt , storedHash] = user.password.split('.')
+    const hash = (await scrypt(password , salt , 32)) as Buffer;
+    
+    
+    if (hash.toString('hex') !== storedHash) {
+      throw new NotFoundException('Please Check the information you Entered')
+    }
+    return  user;
+  }
+
+
+
+
   // SIGNUP
   async signup(body : CreateUserDto){
     const { email, password, confirmPassword , ...rest } = body;
@@ -48,11 +74,12 @@ export class AuthService {
       token : generetedToken,
       password : hashedPassword,
     }
-    console.log(newUser)
-    // // 🧩 Create new user
-    // this.userService.createUser(newUser);
 
-    // return newUser
+
+    // // 🧩 Create new user
+    this.userService.createUser(newUser);
+
+    return newUser
   }
   // DELETE ACCOUNT
 }

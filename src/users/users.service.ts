@@ -29,7 +29,20 @@ export class UsersService {
 
       return user
     }
+
+
+
     // Create User
+    async createUser(user : any) {
+      const newUser = this.usersRepo.create(user)
+
+      if(!newUser) throw new NotFoundException('The User \'s Data isn\'t Found!')
+
+      return await this.usersRepo.save(newUser)
+    }
+
+
+
     // Update User Data
     // Delete User
 }

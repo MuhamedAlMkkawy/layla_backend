@@ -31,7 +31,6 @@ async function bootstrap() {
   app.useGlobalInterceptors(new LanguageInterceptor());
 
   // app.useGlobalGuards(new AuthGuard(), new PermissionsGuard());
-  console.log(process.env.SECRET_KEY)
   // TO MAKE THE APP USE THE COOKIE SESSIONS
   app.use(cookieSession({
     keys : ['user_token'],

@@ -5,10 +5,20 @@ import { Users } from 'src/users/entities/users.entities';
 import { UsersModule } from 'src/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   controllers: [AuthController],
   providers: [AuthService],
-  imports :[UsersModule , JwtModule]
+  imports :[
+    UsersModule , 
+    JwtModule.registerAsync({
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get('JWT_SECRET'),
+        signOptions: { expiresIn: configService.get('JWT_EXPIRES_IN') || '1d' },
+      }),
+      inject: [ConfigService],
+    }),
+  ]
 })
 export class AuthModule {}
