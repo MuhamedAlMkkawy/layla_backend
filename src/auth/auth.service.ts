@@ -25,7 +25,7 @@ export class AuthService {
       email,
       password
     } = body
-    const [user] =  await this.userService.findUser(email)
+    const [user] =  await this.userService.findUserByEmail(email)[0]
     
     if(!user){
       throw new BadRequestException("Please Check the information you Entered😡")
@@ -48,11 +48,12 @@ export class AuthService {
   // SIGNUP
   async signup(body : CreateUserDto){
     const { email, password, confirmPassword , ...rest } = body;
-
+    
     // 🔍 Check if email already exists
-    const userFound = await this.userService.findUser(email);
+    const userFound = await this.userService.findUserByEmail(email);
 
-    if (userFound.length > 0 ) {
+    
+    if (userFound) {
       throw new BadRequestException('This email is already used 😡');
     }
     

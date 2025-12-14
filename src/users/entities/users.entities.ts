@@ -5,8 +5,8 @@ export class Users {
   @PrimaryGeneratedColumn()
   id : number
 
-  @Column()
-  image : string
+  @Column({ nullable: true })
+  image?: string;
   
   @Column()
   name : string
