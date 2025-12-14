@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Session, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Post, Session, UseInterceptors } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -29,14 +29,13 @@ import { UserResponseDto } from '../users/dtos/UserResponce.dto';
   }),
   FlatToNestedWithFilesInterceptor
 )
-@Serialize(UserResponseDto)
-
 
 export class AuthController {
   constructor(private authService : AuthService){}
 
   // SIGNIN
   @Post('/signin')
+  @Serialize(UserResponseDto)
   async logIn(@Body() body : SigninDto , @Session() session : any){
     const user = await this.authService.signin(body)
 
@@ -49,6 +48,7 @@ export class AuthController {
 
   // SIGNUP
   @Post('/signup')
+  @Serialize(UserResponseDto)
   async signUp(@Body() body : CreateUserDto , @Session() session : any) {
     const user = await this.authService.signup(body)
 
@@ -58,6 +58,19 @@ export class AuthController {
   }
 
 
-  
-  // DELETE ACCOUNT
+
+  // Logout
+  @Delete('/logout')
+  async logout(@Session() session: any) {
+    if(!session.user_token){
+      throw new BadRequestException('You are Already Logged Out')
+    }
+    
+    delete session.user_token;
+
+    return {
+      message: 'Logged Out Successfully',
+      data: null
+    };
+  }
 }
