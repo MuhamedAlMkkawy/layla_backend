@@ -4,7 +4,6 @@ import { ValidationPipe } from '@nestjs/common';
 import { ResponseInterceptor } from './interceptors/response.interceptor';
 import { LanguageInterceptor } from './interceptors/languageHandle.interceptor';
 import { AuthGuard } from './guards/auth.guard';
-import { PermissionsGuard } from './guards/permissions.guard';
 import * as express from 'express';
 import { join } from 'path';
 
@@ -30,7 +29,9 @@ async function bootstrap() {
   // To handle the responce depend on the language
   app.useGlobalInterceptors(new LanguageInterceptor());
 
-  // app.useGlobalGuards(new AuthGuard(), new PermissionsGuard());
+  // app.useGlobalGuards(new AuthGuard());
+
+
   // TO MAKE THE APP USE THE COOKIE SESSIONS
   app.use(cookieSession({
     keys : ['user_token'],

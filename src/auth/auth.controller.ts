@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Post, Session, UseInterceptors } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -37,16 +37,27 @@ export class AuthController {
 
   // SIGNIN
   @Post('/signin')
-  async logIn(@Body() body : SigninDto){
-    return await this.authService.signin(body)
+  async logIn(@Body() body : SigninDto , @Session() session : any){
+    const user = await this.authService.signin(body)
+
+    session.user_token = user.token
+
+    return user
   }
 
 
 
   // SIGNUP
   @Post('/signup')
-  async signUp(@Body() body : CreateUserDto) {
-    return await this.authService.signup(body)
+  async signUp(@Body() body : CreateUserDto , @Session() session : any) {
+    const user = await this.authService.signup(body)
+
+    session.user_token = user.token
+
+    return user
   }
+
+
+  
   // DELETE ACCOUNT
 }
